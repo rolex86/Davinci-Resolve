@@ -27,6 +27,8 @@ Artifacts:
 4. Installer asks whether to install into DaVinci now
 5. Restart DaVinci and use title `Kinetic Captions` from Edit -> Titles
 
+If Python is missing, installer can offer automatic install using `winget`.
+
 ## What installer does
 
 - copies app payload into local install directory

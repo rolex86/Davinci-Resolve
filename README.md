@@ -186,7 +186,8 @@ Send the ZIP to end users. They only need to:
 3. Confirm DaVinci install prompt
 4. Restart Resolve
 
-No manual PowerShell setup is required for recipients.
+No manual PowerShell setup is required for recipients.  
+If Python is missing, installer can prompt for automatic install via `winget`.
 
 ## Optional: build single `.exe` installer (Inno Setup)
 
