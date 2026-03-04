@@ -78,6 +78,8 @@ Legend:
 - [x] Preset: Minimal
 - [x] Preset: Custom
 - [x] One-click Windows runner (.bat/.exe)
+- [x] End-user installer entrypoint (`Install_Kinetic_Captions.bat`)
+- [x] Client distribution ZIP package builder
 - [x] Instalace modelu (offline-friendly)
 - [x] README krokovy navod
 - [x] Sample WAV + sample words.json (demo)

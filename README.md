@@ -4,6 +4,7 @@ Complete project scaffold for offline kinetic captions:
 - `generate_words` (offline transcription + word-level timing + JSON validation)
 - Fusion Title template `Kinetic Captions` packaged as `.drfx`
 - Resolve automation script (V2) for timeline audio export, generation, and title insertion
+- End-user installer flow (`Install_Kinetic_Captions.bat`) for one-click runtime + DaVinci setup
 
 ## Implemented feature map
 
@@ -27,6 +28,14 @@ Complete project scaffold for offline kinetic captions:
 - Offline-friendly model installer CLI: `install_whisper_model`
 - Windows wrapper: `install_whisper_model.bat`
 - Supports local-cache-only mode (`--offline-only`)
+
+### End-user installer (distribution mode)
+- `Install_Kinetic_Captions.bat` interactive installer
+- Creates isolated runtime in `%LOCALAPPDATA%\KineticCaptions`
+- Installs Python dependencies automatically (or from local wheels if bundled)
+- Creates launchers (`generate_words.bat`, `install_whisper_model.bat`, `run_resolve_pipeline.bat`)
+- Offers immediate DaVinci integration (copies template/runtime into Resolve support folders)
+- Includes uninstaller flow (`Uninstall_Kinetic_Captions.bat`)
 
 ### Fusion Title (`.drfx`)
 - Title name: `Kinetic Captions`
@@ -63,6 +72,8 @@ Complete project scaffold for offline kinetic captions:
 - `resolve/auto_kinetic_captions.py` - Resolve automation (V2)
 - `scripts/build_drfx.py` - `.drfx` builder
 - `scripts/package_release.py` - release folder packer
+- `scripts/build_windows_bundle.py` - distribution builder (release folder + zip)
+- `installer/` - installer and uninstall wizard
 
 ## Installation
 
@@ -158,6 +169,35 @@ Pipeline will:
 ```bash
 python scripts/package_release.py --output-dir dist/release
 ```
+
+## Build distributable package for clients (recommended)
+
+```bash
+python scripts/build_windows_bundle.py --output-dir dist/distribution
+```
+
+Output:
+- `dist/distribution/release/KineticCaptionsRelease/`
+- `dist/distribution/KineticCaptions_Windows_Package.zip`
+
+Send the ZIP to end users. They only need to:
+1. Extract ZIP
+2. Double click `Install_Kinetic_Captions.bat`
+3. Confirm DaVinci install prompt
+4. Restart Resolve
+
+No manual PowerShell setup is required for recipients.
+
+## Optional: build single `.exe` installer (Inno Setup)
+
+1. Install Inno Setup Compiler (`ISCC.exe`) on your build machine.
+2. Build release package first:
+   - `python scripts/package_release.py --output-dir dist/release`
+3. Compile:
+   - `ISCC installer\\inno\\KineticCaptionsSetup.iss`
+
+Output:
+- `dist/installer/KineticCaptionsSetup.exe`
 
 ## Samples
 

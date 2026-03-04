@@ -18,6 +18,20 @@ def _copy_file(src: Path, dst: Path) -> None:
     shutil.copy2(src, dst)
 
 
+def _copy_tree_clean(src: Path, dst: Path) -> None:
+    ignore = shutil.ignore_patterns(
+        "__pycache__",
+        "*.pyc",
+        "*.pyo",
+        "*.log",
+        ".pytest_cache",
+        ".mypy_cache",
+        ".ruff_cache",
+        ".git",
+    )
+    shutil.copytree(src, dst, dirs_exist_ok=True, ignore=ignore)
+
+
 def package_release(root: Path, output_dir: Path) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -31,6 +45,8 @@ def package_release(root: Path, output_dir: Path) -> Path:
 
     files_to_copy = [
         root / "dist/KineticCaptions.drfx",
+        root / "Install_Kinetic_Captions.bat",
+        root / "Uninstall_Kinetic_Captions.bat",
         root / "generate_words.bat",
         root / "install_whisper_model.bat",
         root / "run_resolve_pipeline.bat",
@@ -44,11 +60,12 @@ def package_release(root: Path, output_dir: Path) -> Path:
         _copy_file(src, release_root / rel)
 
     # Copy source scripts for environments without pip install.
-    shutil.copytree(root / "src", release_root / "src", dirs_exist_ok=True)
-    shutil.copytree(root / "resolve", release_root / "resolve", dirs_exist_ok=True)
-    shutil.copytree(root / "docs", release_root / "docs", dirs_exist_ok=True)
-    shutil.copytree(root / "fusion", release_root / "fusion", dirs_exist_ok=True)
-    shutil.copytree(root / "scripts", release_root / "scripts", dirs_exist_ok=True)
+    _copy_tree_clean(root / "src", release_root / "src")
+    _copy_tree_clean(root / "resolve", release_root / "resolve")
+    _copy_tree_clean(root / "docs", release_root / "docs")
+    _copy_tree_clean(root / "fusion", release_root / "fusion")
+    _copy_tree_clean(root / "scripts", release_root / "scripts")
+    _copy_tree_clean(root / "installer", release_root / "installer")
 
     return release_root
 
