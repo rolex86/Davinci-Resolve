@@ -5,3 +5,4 @@ __pycache__/
 dist/
 *.log
 *.wav
+!samples/sample.wav

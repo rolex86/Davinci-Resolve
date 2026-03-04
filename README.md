@@ -1,125 +1,171 @@
-# Kinetic Captions (DaVinci Resolve Studio, offline-first)
+# Kinetic Captions for DaVinci Resolve Studio (Windows, offline-first)
 
-MVP repository for:
-- `generate_words` CLI (offline word-level timestamps from WAV)
-- `Kinetic Captions` Fusion Title template packaging (`.drfx`)
+Complete project scaffold for offline kinetic captions:
+- `generate_words` (offline transcription + word-level timing + JSON validation)
+- Fusion Title template `Kinetic Captions` packaged as `.drfx`
+- Resolve automation script (V2) for timeline audio export, generation, and title insertion
 
-## Current status
+## Implemented feature map
 
-- Implemented: offline `generate_words` with deterministic token normalization and `words.json` validation.
-- Implemented: Windows one-click wrapper `generate_words.bat`.
-- Implemented: `.drfx` packer script (`scripts/build_drfx.py`) and base Fusion Title template.
-- TODO: full per-word reveal/highlight runtime logic inside Fusion Title (expression/Lua graph) in next iteration.
+### Core generator
+- Offline transcription (CZ/EN + auto language detect)
+- Word-level timestamps
+- CLI `generate_words`
+- Language select: `auto|cs|en`
+- Model select: `small|medium|large`
+- Device select: `cpu|cuda` (with CUDA fallback)
+- VAD on/off + parameters (`vad_min_silence_ms`, `vad_speech_pad_ms`)
+- Layout hints export (`max_line_chars`, `max_words_per_line`)
+- `words.json` output
+- optional `transcript.txt`
+- optional log file
+- pre-save JSON validation
+- deterministic token normalization
+- segment support (`segments`)
 
-## Requirements
+### Model management
+- Offline-friendly model installer CLI: `install_whisper_model`
+- Windows wrapper: `install_whisper_model.bat`
+- Supports local-cache-only mode (`--offline-only`)
 
-- Windows 10/11 (target runtime)
-- DaVinci Resolve Studio (recommended 18.6+)
-- Python 3.10+
+### Fusion Title (`.drfx`)
+- Title name: `Kinetic Captions`
+- Data source mode: File + Inline JSON fallback
+- Missing file / invalid JSON placeholders
+- Runtime caching + periodic source probing (no full parse each frame)
+- Timeline sync + timing offset
+- Modes: Reveal / Highlight / Reveal+Highlight
+- Reveal definition: `s <= t`
+- Highlight definition: `s <= t < e` with fallback
+- Lead/Lag tolerance controls
+- Layout controls: width, lines, alignment, XY, safe margins
+- Rolling window: on/off + window words + trailing + centered
+- Style controls: font/size/tracking/line spacing/color/opacity
+- Outline controls: on/off, color, width
+- Shadow controls: on/off, color, blur, offsets
+- Highlight controls: color/pop/pill + combo controls
+- Animation controls: word animation enum + duration/ease + global fade in/out
+- Presets: Reels Pop / Clean Film / Minimal / Custom
+- Advanced: precise highlight toggle (V2), debug toggle
 
-## Installation (dev)
+### V2 modules
+- Speaker diarization (optional): `--diarization on` (requires `pyannote.audio` extra)
+- Resolve automation script for:
+  - automatic timeline audio export
+  - automatic `generate_words` run
+  - automatic insertion of title clips (best-effort via Resolve API)
+
+## Repository structure
+
+- `src/kinetic_captions/` - generator + caption engine
+- `fusion/Templates/Edit/Titles/Kinetic Captions.setting` - Fusion Title template
+- `fusion/Scripts/Comp/KineticCaptionsRuntime.lua` - runtime logic used by title expressions
+- `resolve/auto_kinetic_captions.py` - Resolve automation (V2)
+- `scripts/build_drfx.py` - `.drfx` builder
+- `scripts/package_release.py` - release folder packer
+
+## Installation
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
+pip install -e .
 ```
 
-On Windows PowerShell:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -e ".[dev]"
-```
-
-## CLI usage
+Optional diarization extras:
 
 ```bash
-generate_words --input "D:\project\audio.wav" --lang auto --model small --device cpu --vad on --max_line_chars 32 --max_words_per_line 7 --transcript-out "D:\project\transcript.txt" --log "D:\project\generate_words.log"
+pip install -e ".[diarization]"
 ```
 
-Arguments:
-- `--input <path.wav>` (required)
-- `--output <path>` (optional, default: `<input_dir>/words.json`)
-- `--lang auto|cs|en`
-- `--model small|medium|large`
-- `--device cpu|cuda` (CUDA auto-falls back to CPU if unavailable)
-- `--vad on|off`
-- `--vad_min_silence_ms <int>`
-- `--max_line_chars <int>`
-- `--max_words_per_line <int>`
-- `--transcript-out <path>` (optional)
-- `--log <path>` (optional)
+Windows one-click wrappers:
+- `generate_words.bat`
+- `install_whisper_model.bat`
+- `run_resolve_pipeline.bat`
 
-## `words.json` schema
+## Install Whisper models (offline-friendly)
 
-Generator writes:
-
-```json
-{
-  "version": "1.0",
-  "lang": "cs",
-  "text": "Ahoj tohle je test.",
-  "words": [
-    {"i": 0, "w": "Ahoj", "s": 0.52, "e": 0.92},
-    {"i": 1, "w": "tohle", "s": 0.95, "e": 1.2}
-  ],
-  "segments": [
-    {"s": 0.5, "e": 2.1, "text": "Ahoj tohle je test."}
-  ],
-  "meta": {
-    "engine": "faster-whisper",
-    "model": "small",
-    "created_utc": "2026-03-04T11:30:00+00:00",
-    "audio": {"sr": 48000, "channels": 1},
-    "device": "cpu",
-    "requested_lang": "auto",
-    "detected_lang": "cs",
-    "notes": ""
-  },
-  "layout_hints": {
-    "max_line_chars": 32,
-    "max_words_per_line": 7
-  }
-}
+```bash
+install_whisper_model --model small --models-dir ./models
 ```
 
-Validation rules:
-- `words` must be non-empty
-- `i` must be continuous `0..N-1`
-- each word must satisfy `s >= 0`, `e >= 0`, `s < e`
-- word starts must be non-decreasing
+Cache-only mode:
 
-## Windows one-click runner
-
-Use root file:
-
-```bat
-generate_words.bat --input "C:\path\audio.wav" --lang auto --model small
+```bash
+install_whisper_model --model small --models-dir ./models --offline-only
 ```
 
-## Build `.drfx`
+## Generate `words.json`
+
+```bash
+generate_words \
+  --input "D:\project\audio.wav" \
+  --output "D:\project\words.json" \
+  --lang auto \
+  --model small \
+  --device cpu \
+  --models-dir "D:\project\models" \
+  --vad on \
+  --vad_min_silence_ms 500 \
+  --vad_speech_pad_ms 80 \
+  --max_line_chars 32 \
+  --max_words_per_line 7 \
+  --transcript-out "D:\project\transcript.txt" \
+  --log "D:\project\generate_words.log"
+```
+
+Optional diarization:
+
+```bash
+generate_words --input audio.wav --diarization on --diarization-model pyannote/speaker-diarization-3.1
+```
+
+## Build and install Fusion Title
+
+Build:
 
 ```bash
 python scripts/build_drfx.py
 ```
 
-Output:
+Result:
 - `dist/KineticCaptions.drfx`
 
-## Sample files
+Install by double click in Resolve, then use title:
+- Edit page -> Titles -> `Kinetic Captions`
 
-- `samples/sample_words.json` (schema reference)
-- `samples/sample_transcript.txt`
-- `samples/sample.wav` (48kHz mono tone for I/O pipeline checks; not speech)
+## Resolve automation pipeline (V2)
 
-## Tests
+Run from Resolve script environment:
 
 ```bash
-pytest
+python resolve/auto_kinetic_captions.py \
+  --output-dir ./out \
+  --title-name "Kinetic Captions" \
+  --title-track 3 \
+  --lang auto --model small --device cpu \
+  --generator-cmd "generate_words"
 ```
 
-## QA checklist
+Pipeline will:
+1. Export current timeline audio to WAV
+2. Generate `words.json`
+3. Insert title clips based on `segments`
+4. Attempt to bind `DataSource` to generated JSON
 
-See [`docs/QA_CHECKLIST.md`](docs/QA_CHECKLIST.md).
+## Build release folder
+
+```bash
+python scripts/package_release.py --output-dir dist/release
+```
+
+## Samples
+
+- `samples/sample.wav` (48kHz mono tone for I/O pipeline checks)
+- `samples/sample_words.json`
+- `samples/sample_transcript.txt`
+
+## QA and planning docs
+
+- `docs/QA_CHECKLIST.md`
+- `docs/FUSION_TITLE_PLAN.md`

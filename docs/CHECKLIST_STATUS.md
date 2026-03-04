@@ -1,0 +1,87 @@
+# Checklist status
+
+Legend:
+- [x] implemented
+- [~] implemented as V2/best-effort module
+
+- [x] Offline transkripce audia (CZ/EN, auto-detect)
+- [x] Word-level timestamps (casovani po slovech)
+- [x] CLI generator `generate_words`
+- [x] Volba jazyka (auto/cs/en)
+- [x] Volba modelu (small/medium/large)
+- [x] Volba zarizeni (CPU/CUDA)
+- [x] VAD / prace s tichem (on/off + parametry)
+- [x] Layout hints export (max_line_chars, max_words_per_line)
+- [x] Vystup `words.json`
+- [x] Vystup `transcript.txt` (volitelne)
+- [x] Logovani prubehu (volitelne)
+- [x] Validace JSON (pred ulozenim)
+- [x] Deterministicka normalizace/tokenizace textu
+- [x] Podpora segmentu (segments)
+- [x] Fusion Title "Kinetic Captions" (.drfx)
+- [x] Data Source: File (vyber `words.json`)
+- [x] Data Source: Inline JSON (fallback)
+- [x] Missing file placeholder
+- [x] Invalid JSON error message
+- [x] Cache/parsing optimalizace (neparsovat per-frame)
+- [x] Casova synchronizace (timeline -> data)
+- [x] Timing Offset (sekundy, +/-)
+- [x] Mode: Reveal
+- [x] Mode: Highlight
+- [x] Mode: Reveal + Highlight
+- [x] Definice Reveal (slova s `s <= t`)
+- [x] Definice Highlight (slovo s `s <= t < e` + fallback)
+- [x] Lead/Lag tolerance (volitelne)
+- [x] Layout: Max width (wrap)
+- [x] Layout: Lines (1/2/Auto)
+- [x] Layout: Align (Left/Center/Right)
+- [x] Layout: Position X/Y
+- [x] Layout: Safe margins
+- [x] Rolling Window: On/Off
+- [x] Rolling Window: Window Words (N)
+- [x] Rolling Window: Window Mode Trailing
+- [x] Rolling Window: Window Mode Centered (V2)
+- [x] Style: Font family
+- [x] Style: Font size
+- [x] Style: Tracking
+- [x] Style: Line spacing
+- [x] Style: Text color
+- [x] Style: Opacity
+- [x] Outline: On/Off
+- [x] Outline: Color
+- [x] Outline: Width
+- [x] Shadow: On/Off
+- [x] Shadow: Color
+- [x] Shadow: Blur
+- [x] Shadow: Offset X/Y
+- [x] Highlight Type: Color
+- [x] Highlight Type: Pop (scale)
+- [x] Highlight Type: Pill background
+- [x] Highlight kombinace (Color+Pop, Pill+Color)
+- [x] Highlight color
+- [x] Pop amount
+- [x] Pop speed/ease
+- [x] Pill color
+- [x] Pill opacity
+- [x] Pill padding X/Y
+- [x] Pill corner radius
+- [x] Pill stroke color/width (volitelne)
+- [~] Precise highlight (Advanced, V2)
+- [x] Reveal word-in animation: None/Fade/Pop/Blur-in
+- [x] Reveal animation duration
+- [x] Reveal animation ease
+- [x] Global fade-in duration
+- [x] Global fade-out duration
+- [x] Presets dropdown
+- [x] Preset: Reels Pop
+- [x] Preset: Clean Film
+- [x] Preset: Minimal
+- [x] Preset: Custom
+- [x] One-click Windows runner (.bat/.exe)
+- [x] Instalace modelu (offline-friendly)
+- [x] README krokovy navod
+- [x] Sample WAV + sample words.json (demo)
+- [~] Speaker diarization (V2)
+- [~] Resolve automatizacni script (V2)
+- [~] Automaticky export audia (V2)
+- [~] Automaticke vlozeni Title klipu (V2)
