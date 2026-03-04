@@ -54,6 +54,9 @@ def package_release(root: Path, output_dir: Path) -> Path:
         root / "pyproject.toml",
         root / "samples/sample.wav",
         root / "samples/sample_words.json",
+        root / "samples/sample_transcript.txt",
+        root / "samples/sample.srt",
+        root / "samples/sample.ass",
     ]
     for src in files_to_copy:
         rel = src.relative_to(root)

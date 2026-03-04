@@ -29,6 +29,11 @@ Artifacts:
 
 If Python is missing, installer can offer automatic install using `winget`.
 
+Recipient can then generate `words.json` from:
+- audio (`--input`)
+- subtitles (`--subtitle` for `.srt` / `.ass`)
+- manual text (`--manual-text` or `--manual-text-file`)
+
 ## What installer does
 
 - copies app payload into local install directory

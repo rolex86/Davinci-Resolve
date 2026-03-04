@@ -7,6 +7,9 @@ Legend:
 - [x] Offline transkripce audia (CZ/EN, auto-detect)
 - [x] Word-level timestamps (casovani po slovech)
 - [x] CLI generator `generate_words`
+- [x] Import `SRT` subtitle souboru bez transkripce audia
+- [x] Import `ASS` subtitle souboru bez transkripce audia
+- [x] Rucni text mode bez transkripce audia
 - [x] Volba jazyka (auto/cs/en)
 - [x] Volba modelu (small/medium/large)
 - [x] Volba zarizeni (CPU/CUDA)

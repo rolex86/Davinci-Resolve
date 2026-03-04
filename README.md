@@ -12,6 +12,8 @@ Complete project scaffold for offline kinetic captions:
 - Offline transcription (CZ/EN + auto language detect)
 - Word-level timestamps
 - CLI `generate_words`
+- Subtitle import (`.srt`, `.ass`) without audio transcription
+- Manual text mode without audio transcription
 - Language select: `auto|cs|en`
 - Model select: `small|medium|large`
 - Device select: `cpu|cuda` (with CUDA fallback)
@@ -131,6 +133,25 @@ Optional diarization:
 generate_words --input audio.wav --diarization on --diarization-model pyannote/speaker-diarization-3.1
 ```
 
+Generate from subtitles without audio:
+
+```bash
+generate_words --subtitle "D:\project\captions.srt" --output "D:\project\words.json" --lang auto
+generate_words --subtitle "D:\project\captions.ass" --output "D:\project\words.json" --lang cs
+```
+
+Generate from manual text without audio:
+
+```bash
+generate_words --manual-text "Ahoj tohle jsou rucni titulky." --output "D:\project\words.json" --manual-duration-sec 4
+```
+
+Or from text file:
+
+```bash
+generate_words --manual-text-file "D:\project\manual.txt" --output "D:\project\words.json" --manual-wpm 150
+```
+
 ## Build and install Fusion Title
 
 Build:
@@ -205,6 +226,8 @@ Output:
 - `samples/sample.wav` (48kHz mono tone for I/O pipeline checks)
 - `samples/sample_words.json`
 - `samples/sample_transcript.txt`
+- `samples/sample.srt`
+- `samples/sample.ass`
 
 ## QA and planning docs
 
