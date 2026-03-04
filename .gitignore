@@ -1,8 +1,75 @@
-.venv/
+# Python bytecode / caches
 __pycache__/
+*.py[cod]
+*$py.class
 .pytest_cache/
-*.pyc
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.tox/
+.nox/
+
+# Python packaging / build artifacts
+build/
 dist/
+site/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test / coverage artifacts
+.coverage
+.coverage.*
+htmlcov/
+
+# Logs / temp
 *.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local model/cache data (can be very large)
+models/
+.cache/
+.huggingface/
+
+# Resolve/local pipeline outputs
+out/
+*.drp
+
+# Large media assets (keep samples explicitly)
 *.wav
+*.mp3
+*.m4a
+*.flac
+*.aac
+*.ogg
+*.mp4
+*.mov
+*.mkv
+
+# Keep demo assets
 !samples/sample.wav
+!samples/sample_words.json
+!samples/sample_transcript.txt
