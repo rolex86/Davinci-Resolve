@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kinetic-captions"
+version = "0.1.0"
+description = "Offline word-level timestamp generator for DaVinci Resolve Kinetic Captions."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "faster-whisper>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
+diarization = [
+  "pyannote.audio>=3.3.2",
+]
+
+[project.scripts]
+generate_words = "kinetic_captions.cli:main"
+install_whisper_model = "kinetic_captions.model_manager:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

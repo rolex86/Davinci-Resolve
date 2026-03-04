@@ -1,0 +1,55 @@
+{
+  "version": "1.0",
+  "lang": "cs",
+  "text": "Ahoj tohle je test.",
+  "words": [
+    {
+      "i": 0,
+      "w": "Ahoj",
+      "s": 0.52,
+      "e": 0.92
+    },
+    {
+      "i": 1,
+      "w": "tohle",
+      "s": 0.95,
+      "e": 1.2
+    },
+    {
+      "i": 2,
+      "w": "je",
+      "s": 1.22,
+      "e": 1.38
+    },
+    {
+      "i": 3,
+      "w": "test.",
+      "s": 1.41,
+      "e": 1.86
+    }
+  ],
+  "segments": [
+    {
+      "s": 0.5,
+      "e": 2.1,
+      "text": "Ahoj tohle je test."
+    }
+  ],
+  "meta": {
+    "engine": "faster-whisper",
+    "model": "small",
+    "created_utc": "2026-03-04T11:30:00+00:00",
+    "audio": {
+      "sr": 48000,
+      "channels": 1
+    },
+    "device": "cpu",
+    "requested_lang": "auto",
+    "detected_lang": "cs",
+    "notes": "Sample payload"
+  },
+  "layout_hints": {
+    "max_line_chars": 32,
+    "max_words_per_line": 7
+  }
+}
